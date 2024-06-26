@@ -242,7 +242,7 @@ a.custom-nav-brand img {
 
 .card-product {
     width: 220px;
-    height: 300px;
+    height: 330px;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     background-color: white;
@@ -529,6 +529,25 @@ a.custom-nav-brand img {
 }
 
 .qty-change-container input::-webkit-inner-spin-button, .qty-change-container input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.custom-number-field {
+    outline: none;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    box-shadow: none;
+    background-color: inherit;
+    font-size: 0.8em;
+    -moz-appearance: textfield;
+    border-radius: 8px;
+    border: 1px solid var(--dark-tint);
+
+}
+
+.size-wrapper input::-webkit-inner-spin-button, .size-wrapper input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }

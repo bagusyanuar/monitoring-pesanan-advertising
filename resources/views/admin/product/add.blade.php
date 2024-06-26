@@ -39,6 +39,22 @@
                 <span id="price-error" class="input-label-error d-none"></span>
             </div>
             <div class="w-100 mb-3">
+                <label for="count" class="form-label input-label">Isi <span
+                        class="color-danger">*</span></label>
+                <input type="number" placeholder="0" class="text-input" id="count"
+                       name="count" value="0">
+                <span id="count-error" class="input-label-error d-none"></span>
+            </div>
+            <div class="w-100 mb-3">
+                <label for="by-size" class="form-label input-label">Harga Berdasarkan Ukuran <span
+                        class="color-danger">*</span></label>
+                <select id="by-size" name="by-size" class="text-input">
+                    <option value="0">Tidak</option>
+                    <option value="1">Ya</option>
+                </select>
+                <span id="by-size-error" class="input-label-error d-none"></span>
+            </div>
+            <div class="w-100 mb-3">
                 <label for="description" class="form-label input-label">Deskripsi</label>
                 <textarea rows="6" placeholder="Product Description" class="text-input" id="description"
                           name="description"></textarea>

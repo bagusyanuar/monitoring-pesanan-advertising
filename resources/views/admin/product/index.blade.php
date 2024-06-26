@@ -143,14 +143,21 @@
 
         function descriptionElement(data) {
             let description = data['deskripsi'];
+            let isi = data['isi'];
+            let harga_ukuran = data['harga_ukuran'] ? 'Ya' : 'Tidak';
             if (description !== null) {
                 let content = data['deskripsi'].toString();
                 let contentString = $.parseHTML(content);
                 return (
-                    '<div>' + contentString[0].nodeValue + '</div>'
+                    '<div>' +
+                    '<p style="font-size: 1em; font-weight: 600; margin-bottom: 5px;">Isi : ' + isi + '</p>' +
+                    '<p style="font-size: 1em; font-weight: 600; margin-bottom: 5px;">Harga Berdasarkan Ukuran : ' + harga_ukuran + '</p>' +
+                    '<hr class="custom-divider" />' +
+                    '' + contentString[0].nodeValue + '' +
+                    '</div>'
                 );
             }
-            return  (
+            return (
                 '<div class="w-100 d-flex justify-content-center align-items-center">' +
                 '<p>Belum ada deskripsi product</p>' +
                 '</div>'

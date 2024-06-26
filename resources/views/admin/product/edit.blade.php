@@ -25,19 +25,9 @@
         <form method="post" id="form-data">
             @csrf
             <div class="w-100 mb-3">
-                <label for="category" class="form-label input-label">Kategori <span
-                        class="color-danger">*</span></label>
-                <select id="category" name="category" class="text-input">
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ $category->id == $data->kategori_id ? 'selected' : '' }}>{{ $category->nama }}</option>
-                    @endforeach
-                </select>
-                <span id="category-error" class="input-label-error d-none"></span>
-            </div>
-            <div class="w-100 mb-3">
                 <label for="name" class="form-label input-label">Nama <span
                         class="color-danger">*</span></label>
-                <input type="text" placeholder="ex: Xiaomi Redmi 9A" class="text-input" id="name"
+                <input type="text" placeholder="ex: Brosur Tipe A" class="text-input" id="name"
                        name="name" value="{{ $data->nama }}">
                 <span id="name-error" class="input-label-error d-none"></span>
             </div>
@@ -47,6 +37,22 @@
                 <input type="number" placeholder="0" class="text-input" id="price"
                        name="price" value="{{ $data->harga }}">
                 <span id="price-error" class="input-label-error d-none"></span>
+            </div>
+            <div class="w-100 mb-3">
+                <label for="count" class="form-label input-label">Isi <span
+                        class="color-danger">*</span></label>
+                <input type="number" placeholder="0" class="text-input" id="count"
+                       name="count" value="{{ $data->isi }}">
+                <span id="count-error" class="input-label-error d-none"></span>
+            </div>
+            <div class="w-100 mb-3">
+                <label for="by-size" class="form-label input-label">Harga Berdasarkan Ukuran <span
+                        class="color-danger">*</span></label>
+                <select id="by-size" name="by-size" class="text-input">
+                    <option value="0" {{ $data->harga_ukuran == 0 ? 'selected' : '' }}>Tidak</option>
+                    <option value="1" {{ $data->harga_ukuran == 1 ? 'selected' : '' }}>Ya</option>
+                </select>
+                <span id="by-size-error" class="input-label-error d-none"></span>
             </div>
             <div class="w-100 mb-3">
                 <label for="description" class="form-label input-label">Deskripsi</label>

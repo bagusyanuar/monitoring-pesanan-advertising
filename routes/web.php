@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [\App\Http\Controllers\Customer\BerandaController::class, 'index'])->name('customer.home');
+
+Route::group(['prefix' => 'product'], function () {
+    Route::get('/', [\App\Http\Controllers\Customer\ProductController::class, 'index'])->name('customer.product');
+    Route::get('/{id}', [\App\Http\Controllers\Customer\ProductController::class, 'detail'])->name('customer.product.detail');
 });
 
 Route::group(['prefix' => 'admin'], function () {
