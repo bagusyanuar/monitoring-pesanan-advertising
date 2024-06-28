@@ -34,11 +34,11 @@
                     </div>
                     <div class="product-action">
                         <a href="#" class="btn-shop" data-id="{{ $product->id }}">
-                            <i class='bx bx-cart-alt'></i>
+                            <i class='bx bx-right-arrow-alt'></i>
                         </a>
-{{--                        <a href="#" class="btn-shop" data-id="{{ $product->id }}">--}}
-{{--                            <i class='bx bx-shopping-bag'></i>--}}
-{{--                        </a>--}}
+                        {{--                        <a href="#" class="btn-shop" data-id="{{ $product->id }}">--}}
+                        {{--                            <i class='bx bx-shopping-bag'></i>--}}
+                        {{--                        </a>--}}
                     </div>
                 </div>
             @endforeach
@@ -75,6 +75,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 let id = this.dataset.id;
+                window.location.href = '/product/' + id;
             })
 
         }

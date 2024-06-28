@@ -45,26 +45,28 @@
                 <a href="#" class="qty-change" data-type="plus"><i class='bx bx-plus'></i></a>
             </div>
             @if($product->harga_ukuran)
-                <hr class="custom-divider" />
+                <hr class="custom-divider"/>
                 <p style="font-size: 0.8em; font-weight: 600; margin-bottom: 8px;">Ukuran</p>
                 <div class="d-flex align-items-center justify-content-between w-100 gap-1">
                     <div class="size-wrapper w-100">
                         <p style="color: var(--dark-tint); margin-bottom: 0; font-size: 0.6em">
                             Panjang
                         </p>
-                        <input type="number" value="1" class="custom-number-field w-100"/>
+                        <input type="number" value="1" class="custom-number-field w-100 field-dimension"
+                               id="txt-width"/>
                     </div>
                     <div class="size-wrapper w-100">
                         <p style="color: var(--dark-tint); margin-bottom: 0; font-size: 0.6em">
                             Lebar
                         </p>
-                        <input type="number" value="1" class="custom-number-field w-100"/>
+                        <input type="number" value="1" class="custom-number-field w-100 field-dimension"
+                               id="txt-height"/>
                     </div>
                     <div class="w-50"></div>
                 </div>
             @endif
 
-            <hr class="custom-divider" />
+            <hr class="custom-divider"/>
             <div class="d-flex align-items-center justify-content-between" style="font-size: 1em;">
                 <span style="color: var(--dark-tint);">Subtotal</span>
                 <span id="lbl-sub-total"
@@ -73,10 +75,10 @@
             <hr class="custom-divider"/>
             @auth()
                 <a href="#" class="btn-cart mb-1" id="btn-cart" data-id="{{ $product->id }}">Keranjang</a>
-                <a href="#" class="btn-shop" id="btn-shop" data-id="{{ $product->id }}">Beli</a>
+{{--                <a href="#" class="btn-shop" id="btn-shop" data-id="{{ $product->id }}">Beli</a>--}}
             @else
                 <a href="#" class="btn-cart mb-1">Keranjang</a>
-                <a href="#" class="btn-shop">Beli</a>
+{{--                <a href="#" class="btn-shop">Beli</a>--}}
             @endauth
         </div>
     </div>
@@ -88,10 +90,17 @@
         var strPrice = '{{ $product->harga }}';
         var strQTY = '{{ $product->qty }}';
         var cartURL = '';
+        var strWidth = '1';
+        var strHeight = '1';
 
         function eventChangeSubTotal(qty = 0) {
             let intPrice = parseInt(strPrice);
-            let subTotal = intPrice * qty;
+            let intWidth = parseInt(strWidth);
+            let intHeight = parseInt(strHeight);
+            let dimension = (intWidth * intHeight);
+            console.log(dimension);
+            let subTotal = intPrice * qty * dimension;
+
             $('#lbl-sub-total').html('Rp' + subTotal.toLocaleString('id-ID'));
         }
 
@@ -101,6 +110,48 @@
                 let id = this.dataset.id;
                 addToCartHandler(id)
             })
+        }
+
+        function eventChangeDimension() {
+            $('#txt-width').keyup(
+                debounce(function (e) {
+                    let qty = parseInt($('#qty-value').val());
+                    let tmpWidth = e.currentTarget.value;
+                    let tmpHeight = $('#txt-height').val();
+                    if (tmpWidth === '') {
+                        strWidth = '0'
+                    } else {
+                        strWidth = tmpWidth;
+                    }
+
+                    if (tmpHeight === '') {
+                        strHeight = '0';
+                    } else {
+                        strHeight = tmpHeight
+                    }
+                    eventChangeSubTotal(qty);
+                }, 300)
+            );
+
+            $('#txt-height').keyup(
+                debounce(function (e) {
+                    let qty = parseInt($('#qty-value').val());
+                    let tmpWidth = $('#txt-width').val();
+                    let tmpHeight = e.currentTarget.value;
+                    if (tmpWidth === '') {
+                        strWidth = '0'
+                    } else {
+                        strWidth = tmpWidth;
+                    }
+
+                    if (tmpHeight === '') {
+                        strHeight = '0';
+                    } else {
+                        strHeight = tmpHeight
+                    }
+                    eventChangeSubTotal(qty);
+                }, 300)
+            );
         }
 
         async function addToCartHandler(id) {
@@ -131,7 +182,7 @@
                 eventChangeSubTotal(newVal)
             });
             eventAddToCart();
-
+            eventChangeDimension();
         })
     </script>
 @endsection
