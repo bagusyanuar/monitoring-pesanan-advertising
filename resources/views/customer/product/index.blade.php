@@ -4,7 +4,7 @@
     <div class="w-100 d-flex justify-content-between align-items-center mb-3">
         <p class="page-title">Product Kami</p>
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0"  style="padding: 0 0;">
+            <ol class="breadcrumb mb-0" style="padding: 0 0;">
                 <li class="breadcrumb-item"><a href="{{ route('customer.home') }}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Product</li>
             </ol>
@@ -20,19 +20,19 @@
 
         </div>
     </div>
-{{--    <div class="d-flex">--}}
-{{--        <div class="categories-sidebar">--}}
-{{--            <a href="#" class="categories-link active" data-tag="all" id="cat-link-all">Semua</a>--}}
-{{--            @foreach($categories as $category)--}}
-{{--                <a href="#" class="categories-link" data-tag="{{ $category->id }}"--}}
-{{--                   id="cat-link-{{ $category->id }}">{{ $category->nama }}</a>--}}
-{{--            @endforeach--}}
-{{--        </div>--}}
-{{--        <div class="flex-grow-1" style="padding-left: 25px;">--}}
+    {{--    <div class="d-flex">--}}
+    {{--        <div class="categories-sidebar">--}}
+    {{--            <a href="#" class="categories-link active" data-tag="all" id="cat-link-all">Semua</a>--}}
+    {{--            @foreach($categories as $category)--}}
+    {{--                <a href="#" class="categories-link" data-tag="{{ $category->id }}"--}}
+    {{--                   id="cat-link-{{ $category->id }}">{{ $category->nama }}</a>--}}
+    {{--            @endforeach--}}
+    {{--        </div>--}}
+    {{--        <div class="flex-grow-1" style="padding-left: 25px;">--}}
 
 
-{{--        </div>--}}
-{{--    </div>--}}
+    {{--        </div>--}}
+    {{--    </div>--}}
 @endsection
 
 @section('js')
@@ -81,7 +81,7 @@
                 let name = v['nama'];
                 let price = v['harga'];
                 let isi = v['isi'];
-                let hargaUkuran = v['harga_ukuran'] ? 'Harga berdasarkan ukuran' :'';
+                let hargaUkuran = v['harga_ukuran'] ? 'Harga berdasarkan ukuran' : '';
                 let formattedPrice = price.toLocaleString('id-ID')
                 productsEl += '<div class="card-product" data-id="' + id + '">' +
                     '<div class="image-container">' +
@@ -103,7 +103,7 @@
                     '</div>' +
                     '<div class="product-action">' +
                     '<a href="#" data-id="' + id + '" class="btn-shop">' +
-                    '<i class="bx bx-cart-alt"></i>' +
+                    '<i class="bx bx-right-arrow-alt"></i>' +
                     '</a>' +
                     '</div>' +
                     '</div>';
@@ -113,7 +113,6 @@
                 '</div>'
             )
         }
-
 
 
         function eventProductAction() {
@@ -132,6 +131,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 let id = this.dataset.id;
+                window.location.href = '/product/' + id;
             })
         }
 

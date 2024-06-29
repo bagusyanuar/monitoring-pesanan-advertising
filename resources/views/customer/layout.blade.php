@@ -20,7 +20,7 @@
     <link href="{{ asset('/css/style.member.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/sweetalert2.css') }}" rel="stylesheet">
     <script src="{{ asset('/js/sweetalert2.min.js')}}"></script>
-    <title>HARI PONSEL</title>
+    <title>JeeDee Advertising</title>
     @yield('css')
 </head>
 <body>
@@ -48,7 +48,7 @@
                 <i class='bx bx-user'></i>
             </a>
         @else
-            <a href="#" class="nav-menu-item">
+            <a href="{{ route('customer.login') }}" class="nav-menu-item">
                 <i class='bx bx-user'></i>
             </a>
         @endauth
