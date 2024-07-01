@@ -34,7 +34,7 @@
             icon: 'success',
             timer: 700
         }).then(() => {
-            window.location.href = '/akun-saya';
+            window.location.href = '/login';
         })
     </script>
 @endif

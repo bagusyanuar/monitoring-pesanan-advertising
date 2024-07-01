@@ -89,7 +89,7 @@
     <script>
         var strPrice = '{{ $product->harga }}';
         var strQTY = '{{ $product->qty }}';
-        var cartURL = '';
+        var cartURL = '{{ route('customer.cart') }}';
         var strWidth = '1';
         var strHeight = '1';
 
@@ -157,9 +157,11 @@
         async function addToCartHandler(id) {
             try {
                 let qty = $('#qty-value').val();
+                let width = $('#txt-width').val();
+                let height = $('#txt-height').val();
                 blockLoading(true);
                 await $.post(cartURL, {
-                    id, qty
+                    id, qty, width, height
                 });
                 blockLoading(false);
                 Swal.fire({

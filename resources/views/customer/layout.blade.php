@@ -40,13 +40,21 @@
     </div>
     <div class="nav-menu-container">
         @auth()
-            <a href="#" class="nav-menu-item">
+            <a href="{{ route('customer.cart') }}" class="nav-menu-item">
                 <i class='bx bx-cart-alt'></i>
-                <div class="custom-badge"><span>4</span></div>
+                <div class="custom-badge d-none"><span>4</span></div>
             </a>
-            <a href="#" class="nav-menu-item">
-                <i class='bx bx-user'></i>
-            </a>
+            <div class="dropdown">
+                <a href="#" style="text-decoration: none" class="nav-menu-item" id="drop-profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class='bx bx-user' style="font-size: 16px"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="drop-profile">
+                    <li><a class="dropdown-item" href="#" style="font-size: 0.8em; font-weight: 600; var(--dark);">Pesanan</a></li>
+                    <li><a class="dropdown-item" href="#" style="font-size: 0.8em; font-weight: 600; var(--dark);">Akun</a></li>
+                    <hr/>
+                    <li><a class="dropdown-item" href="{{ route('customer.logout') }}" style="font-size: 0.8em; font-weight: 600; var(--dark);">Logout</a></li>
+                </ul>
+            </div>
         @else
             <a href="{{ route('customer.login') }}" class="nav-menu-item">
                 <i class='bx bx-user'></i>

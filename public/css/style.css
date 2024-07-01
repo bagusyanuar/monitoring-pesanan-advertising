@@ -13,7 +13,7 @@
     --text-slate-500: rgb(100 116 139);
     --text-slate-600: rgb(71 85 105);
     --card-border: 12px;
-    --bg-accent: #E59D23;
+    --bg-accent: #815594;
 }
 
 body {
@@ -281,6 +281,22 @@ table.dataTable td.dt-control:before {
 
 .middle-header {
     vertical-align: middle !important;
+}
+
+.btn-action-accent {
+    text-decoration: none;
+    padding: 0.75rem 2.5rem;
+    width: 100%;
+    background-color: var(--bg-accent);
+    cursor: pointer;
+    color: white;
+    border: 1px solid var(--bg-accent);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+    font-weight: 500;
 }
 
 /*.product-list-container {*/
