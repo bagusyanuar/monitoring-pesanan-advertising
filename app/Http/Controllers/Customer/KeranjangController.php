@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class KeranjangController extends CustomController
 {
@@ -23,7 +24,7 @@ class KeranjangController extends CustomController
 
     public function index()
     {
-        if ($this->request->method() === 'POST' && $this->request->ajax()) {
+        if ($this->request->method() === 'POST') {
             return $this->addToCart();
         }
 
@@ -31,6 +32,7 @@ class KeranjangController extends CustomController
         $carts = Keranjang::with(['product'])
             ->whereNull('penjualan_id')
             ->where('user_id', '=', auth()->id())
+            ->orderBy('id', 'ASC')
             ->get();
         $subTotal = 0;
         if (count($carts) > 0) {
@@ -58,10 +60,10 @@ class KeranjangController extends CustomController
 
             $bySize = $product->harga_ukuran;
             $productPrice = $product->harga;
-            $total = (int) $qty * $productPrice;
+            $total = (int)$qty * $productPrice;
             if ($bySize) {
-                $dimension = (int) $this->postField('width') * (int) $this->postField('height');
-                $total = (int) $qty * $productPrice * $dimension;
+                $dimension = (int)$this->postField('width') * (int)$this->postField('height');
+                $total = (int)$qty * $productPrice * $dimension;
             }
             $data_request = [
                 'user_id' => $userID,
@@ -81,7 +83,7 @@ class KeranjangController extends CustomController
             }
             Keranjang::create($data_request);
             return $this->jsonSuccessResponse('success', 'Berhasil menambahkan keranjang...');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->jsonErrorResponse();
         }
     }
@@ -102,11 +104,12 @@ class KeranjangController extends CustomController
             DB::beginTransaction();
             $userID = auth()->id();
 
-            $transactionRef = 'HP-'.date('YmdHis');
+            $transactionRef = 'HP-' . date('YmdHis');
             /** @var Collection $carts */
             $carts = Keranjang::with(['product'])
                 ->whereNull('penjualan_id')
                 ->where('user_id', '=', auth()->id())
+                ->orderBy('id', 'ASC')
                 ->get();
 
             if (count($carts) <= 0) {
@@ -124,14 +127,27 @@ class KeranjangController extends CustomController
 
             $transaction = Penjualan::create($data_request);
             /** @var Model $cart */
-            foreach ($carts as $cart) {
-                $cart->update(['penjualan_id' => $transaction->id]);
+            foreach ($carts as $key => $cart) {
+                $data_new_cart = [
+                    'penjualan_id' => $transaction->id
+                ];
+                $fieldFileName = 'file_' . $key;
+                if ($this->request->hasFile($fieldFileName)) {
+                    $file = $this->request->file($fieldFileName);
+                    $extension = $file->getClientOriginalExtension();
+                    $document = Uuid::uuid4()->toString() . '.' . $extension;
+                    $storage_path = public_path('assets/desain');
+                    $documentName = $storage_path . '/' . $document;
+                    $data_new_cart['desain'] = '/assets/desain/' . $document;
+                    $file->move($storage_path, $documentName);
+                }
+                $cart->update($data_new_cart);
             }
             $transID = $transaction->id;
             DB::commit();
-            return $this->jsonSuccessResponse('success', $transID);
-        }catch (\Exception $e) {
-            return $this->jsonErrorResponse($e->getMessage());
+            return redirect()->back()->with('success', 'berhasil melakukan pemesanan...')->with('id', $transID);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', 'terjadi kesalahan server...');
         }
     }
 

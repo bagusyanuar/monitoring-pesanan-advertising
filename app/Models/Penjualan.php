@@ -34,4 +34,9 @@ class Penjualan extends Model
     {
         return $this->hasOne(Pembayaran::class, 'penjualan_id')->orderBy('created_at', 'DESC');
     }
+
+    public function keranjang()
+    {
+        return $this->hasMany(Keranjang::class, 'penjualan_id');
+    }
 }

@@ -1,6 +1,24 @@
 @extends('customer.layout')
 
 @section('content')
+    @if (\Illuminate\Support\Facades\Session::has('failed'))
+        <script>
+            Swal.fire("Ooops", '{{ \Illuminate\Support\Facades\Session::get('failed') }}', "error")
+        </script>
+    @endif
+    @if (\Illuminate\Support\Facades\Session::has('success'))
+        <script>
+            Swal.fire({
+                title: 'Success',
+                text: '{{ \Illuminate\Support\Facades\Session::get('success') }}',
+                icon: 'success',
+                timer: 700
+            }).then(() => {
+                let id = '{{ \Illuminate\Support\Facades\Session::get('id') }}';
+                window.location.href = '/pesanan/' + id + '/pembayaran';
+            })
+        </script>
+    @endif
     <div class="main-content">
         <div class="w-100 d-flex justify-content-between align-items-center mb-3">
             <p class="page-title">Cart</p>
@@ -12,42 +30,53 @@
             </nav>
         </div>
         <div class="d-flex" style="gap: 1rem">
-            <div class="cart-list-container">
-                @forelse($carts as $cart)
-                    <div class="cart-item-container mb-3">
-                        <img src="{{ $cart->product->gambar }}" alt="product-image">
-                        <div class="flex-grow-1">
-                            <p style="color: var(--dark); font-size: 1em; margin-bottom: 0; font-weight: bold">{{ $cart->product->nama }}</p>
-                            <div class="d-flex align-items-center" style="font-size: 0.8em;">
-                                <span style="color: var(--dark-tint);" class="me-1">Jumlah: </span>
-                                <span style="color: var(--dark); font-weight: bold;">{{ $cart->qty }}X
+            <form method="post" action="{{ route('customer.checkout') }}" enctype="multipart/form-data" id="form-cart" class="w-100">
+                @csrf
+                <div class="cart-list-container">
+                    @forelse($carts as $key => $cart)
+                        <div class="cart-item-container mb-3">
+                            <img src="{{ $cart->product->gambar }}" alt="product-image">
+                            <div class="flex-grow-1">
+                                <p style="color: var(--dark); font-size: 1em; margin-bottom: 0; font-weight: bold">{{ $cart->product->nama }}</p>
+                                <div class="d-flex align-items-center" style="font-size: 0.8em;">
+                                    <span style="color: var(--dark-tint);" class="me-1">Jumlah: </span>
+                                    <span style="color: var(--dark); font-weight: bold;">{{ $cart->qty }}X
                                     @if($cart->product->harga_ukuran)
-                                        <span style="font-weight: 500; color: var(--dark-tint);" class="ms-1">
+                                            <span style="font-weight: 500; color: var(--dark-tint);" class="ms-1">
                                             {{ ($cart->panjang * $cart->lebar) }}meter
                                         </span>
-                                    @endif
-                                    (Rp.{{ number_format($cart->harga, 0, ',' ,'.') }})</span>
+                                        @endif
+                                        (Rp.{{ number_format($cart->harga, 0, ',' ,'.') }})</span>
+                                </div>
+                                <div class="d-flex justify-content-start w-100">
+                                    <a href="#" class="btn-delete-item" data-id="{{ $cart->id }}">
+                                        <i class='bx bx-trash'></i>
+                                    </a>
+                                </div>
+                                <hr class="custom-divider"/>
+                                <div class="w-100">
+                                    <label for="file_{{ $key }}" class="form-label input-label">Lampiran Design <span
+                                            class="color-danger">*</span></label>
+                                    <input type="file" class="text-input" id="file_{{ $key }}"
+                                           name="file_{{ $key }}">
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-start w-100">
-                                <a href="#" class="btn-delete-item" data-id="{{ $cart->id }}">
-                                    <i class='bx bx-trash'></i>
-                                </a>
+                            <div class="d-flex justify-content-end" style="width: 150px;">
+                                <p style="font-size: 1em; font-weight: bold; color: var(--dark);">
+                                    Rp{{ number_format($cart->total, 0, ',' ,'.') }}</p>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end" style="width: 150px;">
-                            <p style="font-size: 1em; font-weight: bold; color: var(--dark);">
-                                Rp{{ number_format($cart->total, 0, ',' ,'.') }}</p>
+                    @empty
+                        <div class="w-100 d-flex justify-content-center align-items-center flex-column"
+                             style="background-color: white; border-radius: 12px; box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2); padding: 1rem 1.5rem; min-height: 495px; ">
+                            <p style="margin-bottom: 1rem; font-weight: bold;">Belum Ada Data Belanja...</p>
+                            <a href="{{ route('customer.product') }}" class="btn-action-accent" style="width: fit-content">Pergi
+                                Belanja</a>
                         </div>
-                    </div>
-                @empty
-                    <div class="w-100 d-flex justify-content-center align-items-center flex-column"
-                         style="background-color: white; border-radius: 12px; box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2); padding: 1rem 1.5rem; min-height: 495px; ">
-                        <p style="margin-bottom: 1rem; font-weight: bold;">Belum Ada Data Belanja...</p>
-                        <a href="{{ route('customer.product') }}" class="btn-action-accent" style="width: fit-content">Pergi
-                            Belanja</a>
-                    </div>
-                @endforelse
-            </div>
+                    @endforelse
+                </div>
+            </form>
+
             <div class="cart-action-container">
                 <p style="font-size: 1em; font-weight: bold; color: var(--dark);">Ringkasan Belanja</p>
                 <hr class="custom-divider"/>
@@ -89,26 +118,27 @@
             })
         }
 
-        async function checkoutHandler(id) {
-            try {
-                let url = path + '/checkout';
-                blockLoading(true);
-                let response = await $.post(url);
-                let transID = response['data'];
-                blockLoading(false);
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Berhasil melakukan checkout...',
-                    icon: 'success',
-                    timer: 700
-                }).then(() => {
-                    window.location.href = '/pesanan/' + transID + '/pembayaran';
-                })
-            } catch (e) {
-                blockLoading(false);
-                let error_message = JSON.parse(e.responseText);
-                ErrorAlert('Error', error_message.message);
-            }
+        async function checkoutHandler() {
+            $('#form-cart').submit();
+            // try {
+            //     let url = path + '/checkout';
+            //     blockLoading(true);
+            //     let response = await $.post(url);
+            //     let transID = response['data'];
+            //     blockLoading(false);
+            //     Swal.fire({
+            //         title: 'Success',
+            //         text: 'Berhasil melakukan checkout...',
+            //         icon: 'success',
+            //         timer: 700
+            //     }).then(() => {
+            //         window.location.href = '/pesanan/' + transID + '/pembayaran';
+            //     })
+            // } catch (e) {
+            //     blockLoading(false);
+            //     let error_message = JSON.parse(e.responseText);
+            //     ErrorAlert('Error', error_message.message);
+            // }
         }
 
         $(document).ready(function () {

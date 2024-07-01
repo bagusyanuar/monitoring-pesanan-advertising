@@ -3,33 +3,30 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-1">
         <div>
-            <p class="content-title">Pengguna</p>
-            <p class="content-sub-title">Manajemen data pengguna</p>
+            <p class="content-title">Customer</p>
+            <p class="content-sub-title">Daftar data customer</p>
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Pengguna</li>
+                <li class="breadcrumb-item active" aria-current="page">Customer</li>
             </ol>
         </nav>
     </div>
     <div class="card-content">
         <div class="content-header mb-3">
-            <p class="header-title">Data Pengguna</p>
-            <a href="{{ route('admin.pengguna.add') }}" class="btn-add">
-                <i class='bx bx-plus'></i>
-                <span>Tambah Pengguna</span>
-            </a>
+            <p class="header-title">Data Customer</p>
         </div>
         <hr class="custom-divider"/>
         <table id="table-data" class="display table w-100">
             <thead>
             <tr>
                 <th width="5%" class="text-center">#</th>
-                <th width="15%">Email</th>
-                <th width="15%">Username</th>
+                <th width="15%" class="text-center">Email</th>
+                <th width="15%" class="text-center">Username</th>
                 <th>Nama</th>
-                <th width="10%" class="text-center">Aksi</th>
+                <th width="15%" class="text-center">No. Hp</th>
+                <th width="10%" class="text-center"></th>
             </tr>
             </thead>
         </table>
@@ -55,32 +52,33 @@
                 responsive: true,
                 paging: true,
                 "fnDrawCallback": function (setting) {
-                    eventDelete();
                 },
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false, className: 'text-center middle-header',},
                     {
                         data: 'user.email',
-                        className: 'middle-header',
+                        className: 'middle-header text-center',
                     },
                     {
                         data: 'user.username',
-                        className: 'middle-header',
+                        className: 'middle-header text-center',
                     },
                     {
                         data: 'nama',
                         className: 'middle-header',
                     },
                     {
-                        data: null,
+                        data: 'no_hp',
+                        className: 'middle-header text-center',
+                    },
+                    {
+                        data: 'no_hp',
                         orderable: false,
                         className: 'text-center middle-header',
                         render: function (data) {
-                            let id = data['id'];
-                            let urlEdit = path + '/' + id + '/edit';
+                            let urlWhatsapp = 'https://wa.me/' + data;
                             return '<div class="w-100 d-flex justify-content-center align-items-center gap-1">' +
-                                '<a href="#" class="btn-table-action-delete" data-id="' + id + '"><i class="bx bx-trash"></i></a>' +
-                                '<a href="' + urlEdit + '" class="btn-table-action-edit"><i class="bx bx-edit-alt"></i></a>' +
+                                '<a target="_blank" style="text-decoration: none; color: forestgreen; font-size: 2em;" href="' + urlWhatsapp + '" class=""><i class="bx bxl-whatsapp"></i></a>' +
                                 '</div>';
                         }
                     }
@@ -88,16 +86,6 @@
             });
         }
 
-        function eventDelete() {
-            $('.btn-table-action-delete').on('click', function (e) {
-                e.preventDefault();
-                let id = this.dataset.id;
-                AlertConfirm('Konfirmasi', 'Apakah anda yakin ingin menghapus data?', function () {
-                    let url = path + '/' + id + '/delete';
-                    BaseDeleteHandler(url, id);
-                })
-            })
-        }
 
         $(document).ready(function () {
             generateTable();

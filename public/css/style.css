@@ -27,7 +27,9 @@ body {
     color: color-mix(in srgb, white 20%, black);
 }
 
-
+.color-danger {
+    color: var(--danger);
+}
 
 .lazy-backdrop {
     position: fixed;

@@ -36,8 +36,20 @@ Route::group(['prefix' => 'pesanan'], function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-
+    Route::match(['post', 'get'],'/', [\App\Http\Controllers\Admin\LoginController::class, 'login'])->name('admin.login');
+    Route::get('/logout', [\App\Http\Controllers\Admin\LoginController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::group(['prefix' => 'pengguna'], function () {
+        Route::get('/', [\App\Http\Controllers\Admin\PenggunaController::class, 'index'])->name('admin.pengguna');
+        Route::match(['post', 'get'], '/add', [\App\Http\Controllers\Admin\PenggunaController::class, 'add'])->name('admin.pengguna.add');
+        Route::match(['post', 'get'], '/{id}/edit', [\App\Http\Controllers\Admin\PenggunaController::class, 'edit'])->name('admin.pengguna.edit');
+        Route::post('/{id}/delete', [\App\Http\Controllers\Admin\PenggunaController::class, 'delete'])->name('admin.pengguna.delete');
+    });
+
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('/', [\App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('admin.customer');
+    });
 
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\ProductController::class, 'index'])->name('admin.product');
@@ -48,7 +60,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'pesanan'], function () {
         Route::get('/', [\App\Http\Controllers\Admin\PesananController::class, 'index'])->name('admin.order');
-//        Route::match(['post', 'get'],'/{id}/pesanan-baru', [\App\Http\Controllers\Admin\PesananController::class, 'detail_new'])->name('admin.order.detail.new');
+        Route::match(['post', 'get'],'/{id}/pesanan-baru', [\App\Http\Controllers\Admin\PesananController::class, 'detail_new'])->name('admin.order.detail.new');
 //        Route::match(['post', 'get'],'/{id}/pesanan-proses', [\App\Http\Controllers\Admin\PesananController::class, 'detail_process'])->name('admin.order.detail.process');
 //        Route::match(['post', 'get'],'/{id}/pesanan-selesai', [\App\Http\Controllers\Admin\PesananController::class, 'detail_finish'])->name('admin.order.detail.finish');
     });

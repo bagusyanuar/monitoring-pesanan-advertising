@@ -12,9 +12,7 @@
     color: var(--dark);
 }
 
-.color-danger {
-    color: var(--danger);
-}
+
 
 .bottom-space-medium {
     margin-bottom: 0.5rem;

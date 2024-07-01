@@ -36,7 +36,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a href="#" class="nav-link navbar-link-item">Logout</a>
+            <a href="{{ route('admin.logout') }}" class="nav-link navbar-link-item">Logout</a>
         </li>
     </ul>
 </nav>
@@ -55,6 +55,20 @@
                        class="nav-link d-flex align-items-center sidebar-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
                         <i class="bx bxs-dashboard"></i>
                         <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.pengguna') }}"
+                       class="nav-link d-flex align-items-center sidebar-item {{ request()->is('admin/pengguna*') ? 'active' : '' }}">
+                        <i class='bx bx-user'></i>
+                        <p>Pengguna</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.customer') }}"
+                       class="nav-link d-flex align-items-center sidebar-item {{ request()->is('admin/customer*') ? 'active' : '' }}">
+                        <i class='bx bx-group' ></i>
+                        <p>Customer</p>
                     </a>
                 </li>
                 <li class="nav-item">
