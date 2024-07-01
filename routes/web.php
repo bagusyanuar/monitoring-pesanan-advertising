@@ -45,4 +45,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::match(['post', 'get'], '/{id}/edit', [\App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('admin.product.edit');
         Route::post('/{id}/delete', [\App\Http\Controllers\Admin\ProductController::class, 'delete'])->name('admin.product.delete');
     });
+
+    Route::group(['prefix' => 'pesanan'], function () {
+        Route::get('/', [\App\Http\Controllers\Admin\PesananController::class, 'index'])->name('admin.order');
+//        Route::match(['post', 'get'],'/{id}/pesanan-baru', [\App\Http\Controllers\Admin\PesananController::class, 'detail_new'])->name('admin.order.detail.new');
+//        Route::match(['post', 'get'],'/{id}/pesanan-proses', [\App\Http\Controllers\Admin\PesananController::class, 'detail_process'])->name('admin.order.detail.process');
+//        Route::match(['post', 'get'],'/{id}/pesanan-selesai', [\App\Http\Controllers\Admin\PesananController::class, 'detail_finish'])->name('admin.order.detail.finish');
+    });
 });
