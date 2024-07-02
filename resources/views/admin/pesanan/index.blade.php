@@ -65,10 +65,9 @@
                     <thead>
                     <tr>
                         <th width="5%" class="text-center">#</th>
-                        <th width="20%" class="text-center">No. Penjualan</th>
-                        <th width="8%" class="text-center">Di Kirim</th>
-                        <th width="15%" class="text-center">Status</th>
-                        <th>Alamat</th>
+                        <th width="15%" class="text-center">No. Penjualan</th>
+                        <th class="text-left">Customer</th>
+                        <th width="12%" class="text-center">No. HP</th>
                         <th width="8%" class="text-center"></th>
                     </tr>
                     </thead>
@@ -185,60 +184,12 @@
                         className: 'middle-header text-center',
                     },
                     {
-                        data: 'is_kirim',
-                        orderable: false,
-                        className: 'text-center middle-header',
-                        render: function (data) {
-                            let id = data['id'];
-                            if (data) {
-                                return '<div class="w-100 d-flex justify-content-center align-items-center gap-1">' +
-                                    '<div class="d-flex justify-content-center align-items-center"' +
-                                    ' style="color: white; height: 22px; width: 22px; background-color: var(--success); border-radius: 4px;" data-id="' + id + '">' +
-                                    '<i class="bx bx-check"></i>' +
-                                    '</div>' +
-                                    '</div>';
-                            }
-                            return '<div class="w-100 d-flex justify-content-center align-items-center gap-1">' +
-                                '<div class="d-flex justify-content-center align-items-center"' +
-                                ' style="color: white; height: 22px; width: 22px; background-color: var(--danger); border-radius: 4px;" data-id="' + id + '">' +
-                                '<i class="bx bx-x"></i>' +
-                                '</div>' +
-                                '</div>';
-                        }
+                        data: 'user.customer.nama',
+                        className: 'middle-header text-left',
                     },
                     {
-                        data: 'status',
-                        orderable: false,
-                        className: 'middle-header text-center',
-                        render: function (data) {
-                            let status = '-';
-                            switch (data) {
-                                case  3:
-                                    status = '<div class="chip-status-info">barang di packing</div>';
-                                    break;
-                                case  4:
-                                    status = '<div class="chip-status-info">barang siap di ambil</div>';
-                                    break;
-                                case  5:
-                                    status = '<div class="chip-status-info">barang di kirim</div>';
-                                    break;
-                                default:
-                                    break;
-                            }
-                            return status;
-                        }
-                    },
-                    {
-                        data: null,
-                        orderable: false,
-                        className: 'middle-header',
-                        render: function (data) {
-                            let isDelivery = data['is_kirim'];
-                            if (isDelivery) {
-                                return data['alamat'] + ' (' + data['kota'] + ')';
-                            }
-                            return '';
-                        }
+                        data: 'user.customer.no_hp',
+                        className: 'middle-header text-left',
                     },
                     {
                         data: null,
@@ -338,9 +289,9 @@
 
         $(document).ready(function () {
             generateTableNewOrder();
-            // generateTableProcessOrder();
+            generateTableProcessOrder();
             // generateTableFinishOrder();
-            // eventChangeTab();
+            eventChangeTab();
         })
     </script>
 @endsection

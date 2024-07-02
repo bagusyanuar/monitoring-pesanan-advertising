@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('penjualan_id')->unsigned();
             $table->text('bukti')->nullable();
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->smallInteger('status')->default(0);
             $table->timestamps();
             $table->foreign('penjualan_id')->references('id')->on('penjualans');

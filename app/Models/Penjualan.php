@@ -20,6 +20,14 @@ class Penjualan extends Model
         'status'
     ];
 
+    //status note
+    // 0 menunggu pembayaran
+    // 1 menunggu konfirmasi pembayaran
+    // 2 pesanan di proses
+    // 3 pesanan siap di ambil
+    // 4 selesai
+    // 5 pesanan di tolak
+
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');

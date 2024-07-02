@@ -31,6 +31,22 @@
                     <p style="margin-bottom: 0; font-weight: 500;" class="me-2">Tanggal Pesanan :</p>
                     <p style="margin-bottom: 0">{{ \Carbon\Carbon::parse($data->tanggal)->format('d F Y') }}</p>
                 </div>
+                <div class="w-100 d-flex align-items-center mb-1"
+                     style="font-size: 0.8em; font-weight: 600; color: var(--dark);">
+                    <p style="margin-bottom: 0; font-weight: 500;" class="me-2">Customer :</p>
+                    <p style="margin-bottom: 0">{{ $data->user->customer->nama }}</p>
+                </div>
+                <div class="w-100 d-flex align-items-center mb-1"
+                     style="font-size: 0.8em; font-weight: 600; color: var(--dark);">
+                    <p style="margin-bottom: 0; font-weight: 500;" class="me-2">No. HP :</p>
+                    <div style="margin-bottom: 0" class="d-flex align-items-center">
+                        <span>{{ $data->user->customer->no_hp }}</span>
+                        <a href="https://wa.me/{{$data->user->customer->no_hp}}" class="ms-1" target="_blank"
+                           style="text-decoration: none; color: forestgreen; font-size: 1em;">
+                            <i class="bx bxl-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="col-4"></div>
         </div>
@@ -45,17 +61,20 @@
                         <th>Nama Product</th>
                         <th width="10%" class="text-center">Qty</th>
                         <th width="10%" class="text-end">Total</th>
+                        <th width="10%" class="text-center">Desain</th>
                     </tr>
                     </thead>
                 </table>
                 <hr class="custom-divider"/>
-                <div class="w-100 d-flex justify-content-end" style="font-size: 0.8em; font-weight: bold; color: var(--dark);">
+                <div class="w-100 d-flex justify-content-end"
+                     style="font-size: 0.8em; font-weight: bold; color: var(--dark);">
                     <div class="me-2 w-100 text-end" style="width: 80%">Total :</div>
                     <div class="text-end" style="width: 20%">Rp.{{ number_format($data->total, 0, ',', '.') }}</div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="w-100" style="border: 1px solid var(--dark-tint); border-radius: 8px; padding: 0.5rem 0.5rem;">
+                <div class="w-100"
+                     style="border: 1px solid var(--dark-tint); border-radius: 8px; padding: 0.5rem 0.5rem;">
                     <p style="font-size: 0.8em; font-weight: 600; color: var(--dark);">Ringkasan Pembayaran</p>
                     <hr class="custom-divider"/>
                     <div class="w-100 mb-1" style="font-size: 0.8em; font-weight: 600; color: var(--dark);">
@@ -79,7 +98,8 @@
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input payment-status" type="radio" name="payment-status" id="deny" value="0">
+                    <input class="form-check-input payment-status" type="radio" name="payment-status" id="deny"
+                           value="0">
                     <label class="form-check-label" for="deny" style="font-size: 0.8em; color: var(--dark);">
                         Tolak
                     </label>
@@ -151,8 +171,18 @@
                         }
                     },
                     {
-                        data: 'product.nama',
+                        data: null,
                         className: 'middle-header',
+                        render: function (data) {
+                            let name = data['product']['nama'];
+                            let bySize = data['product']['harga_ukuran'];
+                            let width = data['panjang'];
+                            let height = data['lebar'];
+                            if (bySize) {
+                                return name + 'ukuran (' + width + ' x ' + height + ')';
+                            }
+                            return name;
+                        }
                     },
                     {
                         data: 'qty',
@@ -166,6 +196,14 @@
                         className: 'middle-header text-end',
                         render: function (data) {
                             return data.toLocaleString('id-ID');
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'middle-header text-center',
+                        render: function (data) {
+                            let urlDesign = data['desain'];
+                            return '<a href="' + urlDesign + '" target="_blank">Download</a>'
                         }
                     },
                 ],
@@ -210,7 +248,7 @@
                 }).then(() => {
                     window.location.href = '/admin/pesanan';
                 })
-            }catch (e) {
+            } catch (e) {
                 let error_message = JSON.parse(e.responseText);
                 ErrorAlert('Error', error_message.message);
             }
