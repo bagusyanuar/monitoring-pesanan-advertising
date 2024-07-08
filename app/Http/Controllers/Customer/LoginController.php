@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 
 
 use App\Helper\CustomController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,6 +38,16 @@ class LoginController extends CustomController
                 'username' => $this->postField('username'),
                 'password' => $this->postField('password')
             ];
+
+            $user = User::with([])
+                ->where('role', '=', 'customer')
+                ->where('username', '=', $this->postField('username'))
+                ->first();
+
+            if (!$user) {
+                return redirect()->back()->with('failed', 'user tidak ditemukan...');
+            }
+
             if ($this->isAuth($credentials)) {
                 return redirect('/');
             }

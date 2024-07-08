@@ -32,12 +32,16 @@ class PesananController extends CustomController
 
     public function detail($id)
     {
-        return view('customer.pesanan.detail');
+        $data = Penjualan::with(['pembayaran_status', 'keranjang'])
+            ->findOrFail($id);
+        return view('customer.pesanan.detail')->with([
+            'data' => $data
+        ]);
     }
 
     public function pembayaran($id)
     {
-        $data = Penjualan::with(['pembayaran_status'])
+        $data = Penjualan::with(['pembayaran_status', 'keranjang'])
             ->findOrFail($id);
         if ($this->request->method() === 'POST' && $this->request->ajax()) {
             return $this->payment($data);

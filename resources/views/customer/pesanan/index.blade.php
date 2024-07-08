@@ -95,25 +95,22 @@
                             let status = '-';
                             switch (data) {
                                 case 0:
-                                    status = '<div class="chip-status-danger">menunggu pembayaran</div>';
+                                    status = '<div class="chip-status-warning">menunggu pembayaran</div>';
                                     break;
                                 case  1:
                                     status = '<div class="chip-status-warning">menunggu konfirmasi pembayaran</div>';
                                     break;
                                 case  2:
-                                    status = '<div class="chip-status-danger">pembayaran di tolak</div>';
+                                    status = '<div class="chip-status-warning">pesanan di proses</div>';
                                     break;
                                 case  3:
-                                    status = '<div class="chip-status-info">barang di packing</div>';
+                                    status = '<div class="chip-status-info">pesanan siap diambil</div>';
                                     break;
                                 case  4:
-                                    status = '<div class="chip-status-info">barang siap di ambil</div>';
+                                    status = '<div class="chip-status-success">selesai</div>';
                                     break;
                                 case  5:
-                                    status = '<div class="chip-status-info">barang di kirim</div>';
-                                    break;
-                                case  6:
-                                    status = '<div class="chip-status-success">selesai</div>';
+                                    status = '<div class="chip-status-danger">pesanan di tolak</div>';
                                     break;
                                 default:
                                     break;

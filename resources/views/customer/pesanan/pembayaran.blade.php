@@ -48,9 +48,9 @@
             <div class="d-flex align-items-center mb-1">
                 <span style="" class="me-2">Status :</span>
                 <span style="font-weight: 600;">
-                        @if($data->status === 0)
-                        <div class="chip-status-danger">menunggu pembayaran</div>
-                    @endif
+                        @if($data->status === 0 || $data->status === 5)
+                            <div class="chip-status-danger">menunggu pembayaran</div>
+                        @endif
                 </span>
             </div>
         </div>
