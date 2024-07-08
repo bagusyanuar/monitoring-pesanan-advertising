@@ -85,6 +85,13 @@
                         <p>Pesanan</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.report') }}"
+                       class="nav-link d-flex align-items-center sidebar-item {{ request()->is('admin/laporan-penjualan*') ? 'active' : '' }}">
+                        <i class='bx bx-receipt'></i>
+                        <p>Laporan</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

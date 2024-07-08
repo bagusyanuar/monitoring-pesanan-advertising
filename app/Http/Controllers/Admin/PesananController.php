@@ -37,15 +37,15 @@ class PesananController extends CustomController
             }
 
             if ($status === '3') {
-                $data = Penjualan::with([])
+                $data = Penjualan::with(['user.customer'])
                     ->where('status', '=', 3)
                     ->orderBy('updated_at', 'ASC')
                     ->get();
             }
 
             if ($status === '4') {
-                $data = Penjualan::with([])
-                    ->where('status', '=', 5)
+                $data = Penjualan::with(['user.customer'])
+                    ->where('status', '=', 4)
                     ->orderBy('updated_at', 'ASC')
                     ->get();
             }
@@ -68,6 +68,57 @@ class PesananController extends CustomController
         $data = Penjualan::with(['pembayaran_status', 'keranjang', 'user'])
             ->findOrFail($id);
         return view('admin.pesanan.detail.baru')->with([
+            'data' => $data
+        ]);
+    }
+
+    public function detail_process($id)
+    {
+        if ($this->request->ajax()) {
+            if ($this->request->method() === 'POST') {
+                return $this->change_process_status($id);
+            }
+            $data = Keranjang::with(['product'])
+                ->where('penjualan_id', '=', $id)
+                ->get();
+            return $this->basicDataTables($data);
+        }
+        $data = Penjualan::with(['pembayaran_status', 'keranjang', 'user'])
+            ->findOrFail($id);
+        return view('admin.pesanan.detail.proses')->with([
+            'data' => $data
+        ]);
+    }
+
+    public function detail_finish($id)
+    {
+        if ($this->request->ajax()) {
+            $data = Keranjang::with(['product'])
+                ->where('penjualan_id', '=', $id)
+                ->get();
+            return $this->basicDataTables($data);
+        }
+        $data = Penjualan::with(['pembayaran_status', 'keranjang', 'user'])
+            ->findOrFail($id);
+        return view('admin.pesanan.detail.selesai')->with([
+            'data' => $data
+        ]);
+    }
+
+    public function detail_take($id)
+    {
+        if ($this->request->ajax()) {
+            if ($this->request->method() === 'POST') {
+                return $this->change_process_status($id);
+            }
+            $data = Keranjang::with(['product'])
+                ->where('penjualan_id', '=', $id)
+                ->get();
+            return $this->basicDataTables($data);
+        }
+        $data = Penjualan::with(['pembayaran_status', 'keranjang', 'user'])
+            ->findOrFail($id);
+        return view('admin.pesanan.detail.siap-diambil')->with([
             'data' => $data
         ]);
     }
@@ -108,6 +159,26 @@ class PesananController extends CustomController
             return $this->jsonSuccessResponse('success', 'Berhasil melakukan konfirmasi...');
         } catch (\Exception $e) {
             DB::rollBack();
+            return $this->jsonErrorResponse($e->getMessage());
+        }
+    }
+
+    private function change_process_status($id)
+    {
+        try {
+            $status = $this->postField('status');
+            $order = Penjualan::with([])
+                ->where('id', '=', $id)
+                ->first();
+            if (!$order) {
+                return $this->jsonNotFoundResponse('data tidak ditemukan...');
+            }
+            $data_request_order = [
+                'status' => $status,
+            ];
+            $order->update($data_request_order);
+            return $this->jsonSuccessResponse('success', 'Berhasil merubah data product...');
+        } catch (\Exception $e) {
             return $this->jsonErrorResponse($e->getMessage());
         }
     }

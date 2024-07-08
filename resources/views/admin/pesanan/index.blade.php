@@ -29,6 +29,13 @@
             </button>
         </li>
         <li class="nav-item" role="presentation">
+            <button class="nav-link custom-tab-link" id="pills-take-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-take"
+                    type="button" role="tab" aria-controls="pills-take" aria-selected="false">
+                Pesanan Siap Diambil
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
             <button class="nav-link custom-tab-link" id="pills-finish-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-finish"
                     type="button" role="tab" aria-controls="pills-finish" aria-selected="false">
@@ -74,26 +81,45 @@
                 </table>
             </div>
         </div>
-        <div class="tab-pane fade" id="pills-finish" role="tabpanel" aria-labelledby="pills-finish-tab">
+        <div class="tab-pane fade" id="pills-take" role="tabpanel" aria-labelledby="pills-take-tab">
             <div class="card-content">
                 <div class="content-header mb-3">
-                    <p class="header-title">Data Pesanan Di Proses</p>
+                    <p class="header-title">Data Pesanan Siap Diambil</p>
                 </div>
                 <hr class="custom-divider"/>
-                <table id="table-data-finish-order" class="display table w-100">
+                <table id="table-data-take-order" class="display table w-100">
                     <thead>
                     <tr>
                         <th width="5%" class="text-center">#</th>
-                        <th>No. Penjualan</th>
-                        <th width="10%" class="text-end">Sub Total</th>
-                        <th width="10%" class="text-end">Ongkir</th>
-                        <th width="10%" class="text-end">Total</th>
+                        <th width="15%" class="text-center">No. Penjualan</th>
+                        <th class="text-left">Customer</th>
+                        <th width="12%" class="text-center">No. HP</th>
                         <th width="8%" class="text-center"></th>
                     </tr>
                     </thead>
                 </table>
             </div>
         </div>
+        <div class="tab-pane fade" id="pills-finish" role="tabpanel" aria-labelledby="pills-finish-tab">
+            <div class="card-content">
+                <div class="content-header mb-3">
+                    <p class="header-title">Data Pesanan Selesai</p>
+                </div>
+                <hr class="custom-divider"/>
+                <table id="table-data-finish-order" class="display table w-100">
+                    <thead>
+                    <tr>
+                        <th width="5%" class="text-center">#</th>
+                        <th width="15%" class="text-center">No. Penjualan</th>
+                        <th class="text-left">Customer</th>
+                        <th width="12%" class="text-center">No. HP</th>
+                        <th width="8%" class="text-center"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
     </div>
 
 @endsection
@@ -102,7 +128,7 @@
     <script src="{{ asset('/js/helper.js') }}"></script>
     <script>
         var path = '/{{ request()->path() }}';
-        var table, tableProcess, tableFinish;
+        var table, tableProcess, tableTake ,tableFinish;
 
         function generateTableNewOrder() {
             table = $('#table-data-new-order').DataTable({
@@ -208,8 +234,8 @@
 
         }
 
-        function generateTableFinishOrder() {
-            tableFinish = $('#table-data-finish-order').DataTable({
+        function generateTableTakeOrder() {
+            tableTake = $('#table-data-take-order').DataTable({
                 ajax: {
                     type: 'GET',
                     url: path,
@@ -234,29 +260,68 @@
                     },
                     {
                         data: 'no_penjualan',
-                        className: 'middle-header',
+                        className: 'middle-header text-center',
                     },
                     {
-                        data: 'sub_total',
-                        className: 'middle-header text-end',
-                        render: function (data) {
-                            return data.toLocaleString('id-ID');
-                        }
+                        data: 'user.customer.nama',
+                        className: 'middle-header text-left',
                     },
+                    {
+                        data: 'user.customer.no_hp',
+                        className: 'middle-header text-left',
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        className: 'text-center middle-header',
+                        render: function (data) {
+                            let id = data['id'];
+                            let urlDetail = path + '/' + id + '/siap-diambil';
+                            return '<div class="w-100 d-flex justify-content-center align-items-center gap-1">' +
+                                '<a style="color: var(--dark-tint)" href="' + urlDetail + '" class="btn-table-action" data-id="' + id + '"><i class="bx bx-dots-vertical-rounded"></i></a>' +
+                                '</div>';
+                        }
+                    }
+                ],
+            });
 
+        }
+
+        function generateTableFinishOrder() {
+            tableFinish = $('#table-data-finish-order').DataTable({
+                ajax: {
+                    type: 'GET',
+                    url: path,
+                    'data': function (d) {
+                        d.status = 4
+                    }
+                },
+                "aaSorting": [],
+                "order": [],
+                scrollX: true,
+                responsive: true,
+                paging: true,
+                "fnDrawCallback": function (setting) {
+                },
+                columns: [
                     {
-                        data: 'ongkir',
-                        className: 'middle-header text-end',
-                        render: function (data) {
-                            return data.toLocaleString('id-ID');
-                        }
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        searchable: false,
+                        orderable: false,
+                        className: 'text-center middle-header',
                     },
                     {
-                        data: 'total',
-                        className: 'middle-header text-end',
-                        render: function (data) {
-                            return data.toLocaleString('id-ID');
-                        }
+                        data: 'no_penjualan',
+                        className: 'middle-header text-center',
+                    },
+                    {
+                        data: 'user.customer.nama',
+                        className: 'middle-header text-left',
+                    },
+                    {
+                        data: 'user.customer.no_hp',
+                        className: 'middle-header text-left',
                     },
                     {
                         data: null,
@@ -281,6 +346,10 @@
                     tableProcess.columns.adjust();
                 }
 
+                if (e.target.id === 'pills-take-tab') {
+                    tableTake.columns.adjust();
+                }
+
                 if (e.target.id === 'pills-finish-tab') {
                     tableFinish.columns.adjust();
                 }
@@ -290,7 +359,8 @@
         $(document).ready(function () {
             generateTableNewOrder();
             generateTableProcessOrder();
-            // generateTableFinishOrder();
+            generateTableTakeOrder();
+            generateTableFinishOrder();
             eventChangeTab();
         })
     </script>
