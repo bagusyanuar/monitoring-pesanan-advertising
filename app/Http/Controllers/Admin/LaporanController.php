@@ -38,7 +38,7 @@ class LaporanController extends CustomController
             ->whereBetween('tanggal', [$start, $end])
             ->orderBy('updated_at', 'ASC')
             ->get();
-        return $this->convertToPdf('admin.laporan.cetak-konsultasi', [
+        return $this->convertToPdf('admin.laporan.cetak-penjualan', [
             'data' => $data,
             'start' => $start,
             'end' => $end

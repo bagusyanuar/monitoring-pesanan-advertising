@@ -41,13 +41,19 @@
             <thead>
             <tr>
                 <th width="5%" class="text-center">#</th>
-                <th width="15%" class="text-center">No. Penjualan</th>
+                <th width="18%" class="text-center">Tanggal</th>
+                <th width="18%" class="text-center">No. Penjualan</th>
                 <th class="text-left">Customer</th>
                 <th width="12%" class="text-center">No. HP</th>
-                <th width="8%" class="text-center"></th>
+                <th width="12%" class="text-end">Total</th>
             </tr>
             </thead>
         </table>
+        <hr class="custom-divider" />
+        <div class="text-right mt-3">
+            <span class="mr-2 font-weight-bold">Total Pendapatan : </span>
+            <span class="font-weight-bold" id="lbl-total">Rp. 0</span>
+        </div>
     </div>
 @endsection
 
@@ -73,7 +79,11 @@
                 scrollX: true,
                 responsive: true,
                 paging: true,
+                dom: 'ltrip',
                 "fnDrawCallback": function (setting) {
+                    let data = this.fnGetData();
+                    let total = data.map(item => item['total']).reduce((prev, next) => prev + next, 0);
+                    $('#lbl-total').html('Rp. ' + total.toLocaleString('id-ID'));
                 },
                 columns: [
                     {
@@ -82,6 +92,10 @@
                         searchable: false,
                         orderable: false,
                         className: 'text-center middle-header',
+                    },
+                    {
+                        data: 'tanggal',
+                        className: 'middle-header text-center',
                     },
                     {
                         data: 'no_penjualan',
@@ -96,17 +110,12 @@
                         className: 'middle-header text-left',
                     },
                     {
-                        data: null,
-                        orderable: false,
-                        className: 'text-center middle-header',
+                        data: 'total',
+                        className: 'middle-header text-end',
                         render: function (data) {
-                            let id = data['id'];
-                            let urlDetail = path + '/' + id + '/pesanan-selesai';
-                            return '<div class="w-100 d-flex justify-content-center align-items-center gap-1">' +
-                                '<a style="color: var(--dark-tint)" href="' + urlDetail + '" class="btn-table-action" data-id="' + id + '"><i class="bx bx-dots-vertical-rounded"></i></a>' +
-                                '</div>';
+                            return data.toLocaleString('id-ID');
                         }
-                    }
+                    },
                 ],
             });
         }
