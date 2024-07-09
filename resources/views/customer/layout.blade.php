@@ -35,8 +35,8 @@
         <a href="{{ route('customer.product') }}" class="nav-link-item {{ request()->is('product*') ? 'active' : '' }}">
             Product
         </a>
-        <a href="#" class="nav-link-item">Tentang Kami</a>
-        <a href="#" class="nav-link-item">Kontak</a>
+        <a href="{{ route('customer.about') }}" class="nav-link-item {{ request()->is('tentang-kami*') ? 'active' : '' }}">Tentang Kami</a>
+        <a href="{{ route('customer.contact') }}" class="nav-link-item {{ request()->is('kontak*') ? 'active' : '' }}">Kontak</a>
     </div>
     <div class="nav-menu-container">
         @auth()
@@ -78,8 +78,8 @@
         <p style="color: white; font-size: 1em; font-weight: 500; letter-spacing: 2px">HARI PONSEL</p>
         <a href="{{ route('customer.home') }}" class="footer-link mb-1">BERANDA</a>
 
-        <a href="#" class="footer-link mb-1">TENTANG KAMI</a>
-        <a href="#" class="footer-link">KONTAK</a>
+        <a href="{{ route('customer.about') }}" class="footer-link mb-1">TENTANG KAMI</a>
+        <a href="{{ route('customer.contact') }}" class="footer-link">KONTAK</a>
     </div>
     <div class="col-3">
         <p style="color: white; font-size: 1em; font-weight: 500; letter-spacing: 2px">HUBUNGI KAMI</p>

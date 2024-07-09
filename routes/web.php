@@ -17,6 +17,8 @@ Route::get('/', [\App\Http\Controllers\Customer\BerandaController::class, 'index
 Route::match(['post', 'get'],'/login', [\App\Http\Controllers\Customer\LoginController::class, 'login'])->name('customer.login');
 Route::match(['post', 'get'],'/register', [\App\Http\Controllers\Customer\RegisterController::class, 'register'])->name('customer.register');
 Route::get('/logout', [\App\Http\Controllers\Customer\LoginController::class, 'logout'])->name('customer.logout');
+Route::get('/tentang-kami', [\App\Http\Controllers\Customer\TentangKamiController::class, 'index'])->name('customer.about');
+Route::get('/kontak', [\App\Http\Controllers\Customer\KontakController::class, 'index'])->name('customer.contact');
 
 Route::group(['prefix' => 'product'], function () {
     Route::get('/', [\App\Http\Controllers\Customer\ProductController::class, 'index'])->name('customer.product');
