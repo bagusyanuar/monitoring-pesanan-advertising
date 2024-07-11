@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Validator;
 
 class PenggunaController extends CustomController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         if ($this->request->ajax()) {
